@@ -133,7 +133,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 .login-card {
   background: var(--theme-login-card-bg, #FFFFFF);
   width: 100%;
-  max-width: 400px;
+  max-width: 460px;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   padding: 36px 32px 32px;
@@ -147,6 +147,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 .login-card h1 {
   font-size: 21px; margin: 0 0 4px;
   letter-spacing: 0.2px;
+  /* Shop name + branch always on ONE line; app.js shrinks the font to fit. */
+  white-space: nowrap; overflow: hidden; text-overflow: clip;
   color: var(--theme-login-heading, #1F1B1B);
 }
 .login-card p.sub { color: var(--theme-login-text, #5A5150); font-size: 13px; margin: 0 0 24px; }

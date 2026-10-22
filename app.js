@@ -673,6 +673,21 @@ async function bootstrapApp() {
 
 // Brand bits (name, title, logos, browser-tab icon) - shared by the login
 // screen (public settings) and the app itself (full settings).
+// Keeps "Shop name - Branch" on one line in the login box: starts at the
+// normal size and steps the font down only when it would not fit.
+function fitLoginTitle_() {
+  const el = document.getElementById('loginTitle');
+  if (!el || !el.clientWidth) return;
+  el.style.fontSize = '';
+  let size = parseFloat(getComputedStyle(el).fontSize) || 21;
+  while (el.scrollWidth > el.clientWidth && size > 12) {
+    size -= 0.5;
+    el.style.fontSize = size + 'px';
+  }
+}
+window.addEventListener('resize', fitLoginTitle_);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitLoginTitle_);
+
 function applyBrandingToUI_(s) {
   s = s || {};
   // Small square logo (sidebar / top bar / browser tab) and the wider bill
@@ -690,6 +705,7 @@ function applyBrandingToUI_(s) {
   document.title = appTitle + ' - Billing, Sales & Inventory';
   const setText = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
   setText('loginTitle', company);
+  fitLoginTitle_();
   const shopField = document.getElementById('f_company');
   if (shopField) shopField.value = company;
   // "Kovai Lakshmi Grinders - Coimbatore" -> name on line 1, branch on line 2
