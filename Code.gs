@@ -45,7 +45,10 @@ const BRAND_CODE = 'KLG';
 // Where the lightweight logos & icons live (the BILLING folder uploaded to
 // the kovailakshmi.in website repo). Only used as DEFAULTS - each logo can
 // be changed any time in Admin Settings -> Shop Details.
-const ASSET_BASE = 'https://kovailakshmi.in/BILLING/';
+const ASSET_BASE = 'https://kovailakshmi.in/cbe-billing/BILLING/';
+// Older address used before the app moved to kovailakshmi.in/cbe-billing/.
+// Any logo saved with it in the Settings sheet is pointed to ASSET_BASE automatically.
+const OLD_ASSET_BASES_ = ['https://kovailakshmi.in/BILLING/'];
 
 // "KLG-CBE"
 function idPrefix_() { return BRAND_CODE + '-' + BRANCH.CODE; }
@@ -799,7 +802,7 @@ function clearAllCache_() {
 // 3. SETTINGS HELPERS
 // ---------------------------------------------------------------------------
 function getSettingsMap_() {
-  return cached_('settings', function () {
+  return fixAssetUrls_(cached_('settings', function () {
     const sh = ss_().getSheetByName(SHEET.SETTINGS);
     if (!sh) return {};
     const data = sh.getDataRange().getValues();
@@ -808,7 +811,18 @@ function getSettingsMap_() {
       if (data[i][0]) map[data[i][0]] = data[i][1];
     }
     return map;
+  }));
+}
+
+// Points logo addresses saved under the old image folder to the current one.
+function fixAssetUrls_(map) {
+  ['LogoURL', 'PrintLogoURL', 'LetterheadLogoURL'].forEach(function (k) {
+    const v = String(map[k] || '');
+    OLD_ASSET_BASES_.forEach(function (oldBase) {
+      if (v.indexOf(oldBase) === 0) map[k] = ASSET_BASE + v.slice(oldBase.length);
+    });
   });
+  return map;
 }
 
 // Writes many settings with one read + one write. Existing rows are updated
@@ -2430,7 +2444,8 @@ function socialLinks_(s) {
     s.SocialInstagram ? { icon: 'INSTA.png', href: s.SocialInstagram, alt: 'Instagram' } : null,
     s.SocialFacebook ? { icon: 'FACEBOOK.png', href: s.SocialFacebook, alt: 'Facebook' } : null,
     s.SocialLinkedIn ? { icon: 'LINKEDIN.png', href: s.SocialLinkedIn, alt: 'LinkedIn' } : null,
-    s.SocialYouTube ? { icon: 'YOUTUBE.png', href: s.SocialYouTube, alt: 'YouTube' } : null
+    s.SocialYouTube ? { icon: 'YOUTUBE.png', href: s.SocialYouTube, alt: 'YouTube' } : null,
+    s.Website ? { icon: 'WEBSITE.png', href: /^https?:\/\//i.test(String(s.Website)) ? String(s.Website) : 'https://' + String(s.Website).replace(/^\/+/, ''), alt: 'Website' } : null
   ].filter(Boolean);
 }
 

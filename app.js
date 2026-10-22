@@ -6593,7 +6593,7 @@ const LP_EMPTY_HTML = '<p><br></p>';
 //      so each branch's letterpad shows its own address, numbers and handles
 //      without touching any code. On paper a link is useless, so each icon
 //      carries its handle as text (e.g. "lakshmi.grinders").
-const LP_ICON_BASE = 'https://kovailakshmi.in/BILLING/';
+const LP_ICON_BASE = 'https://kovailakshmi.in/cbe-billing/BILLING/';
 function lpHandleFromUrl_(url, kind) {
   const raw = String(url || '').trim();
   if (!raw) return '';
@@ -6625,7 +6625,7 @@ function renderLetterpadBands_() {
   if (s.SocialFacebook) items.push(['FACEBOOK.png', 'Facebook', lpHandleFromUrl_(s.SocialFacebook, 'facebook')]);
   if (s.SocialLinkedIn) items.push(['LINKEDIN.png', 'LinkedIn', lpHandleFromUrl_(s.SocialLinkedIn)]);
   if (s.SocialYouTube) items.push(['YOUTUBE.png', 'YouTube', lpHandleFromUrl_(s.SocialYouTube)]);
-  if (s.Website) items.push(['FAVICON.png', 'Website', String(s.Website).replace(/^https?:\/\//i, '').replace(/\/$/, '')]);
+  if (s.Website) items.push(['WEBSITE.png', 'Website', String(s.Website).replace(/^https?:\/\//i, '').replace(/\/$/, '')]);
   const addr = String(s.Address || '').replace(/\n+/g, ', ');
   foot.innerHTML =
     '<div class="lp-rule"></div>' +
